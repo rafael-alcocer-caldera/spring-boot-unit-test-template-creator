@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class PersonTest { 
+public class PersonTest {
 
     @Mock
     private java.lang.String name;
@@ -19,31 +19,38 @@ public class PersonTest {
     private Person person;
 
     @Test
+    public void myName() {
+        // TODO Add some useful test code here
+    }
+
+    @Test
     public void getName() {
+        // TODO Add some useful test code here
     }
 
     @Test
     public void setName() {
+        // TODO Add some useful test code here
     }
 
     @Test
     public void results() {
+        // TODO Add some useful test code here
     }
 
     @Test
     public void createAddress() {
-    }
-
-    @Test
-    public void myName() {
+        // TODO Add some useful test code here
     }
 
     @Test
     public void getAge() {
+        // TODO Add some useful test code here
     }
 
     @Test
     public void setAge() {
+        // TODO Add some useful test code here
     }
 
 }

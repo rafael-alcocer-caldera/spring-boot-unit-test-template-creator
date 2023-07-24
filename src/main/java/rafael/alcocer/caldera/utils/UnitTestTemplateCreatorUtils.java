@@ -38,7 +38,7 @@ public final class UnitTestTemplateCreatorUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static String createClass(String className, TestingFramework testingFramework)
+    public static String createClassUsingStringBuilder(String className, TestingFramework testingFramework)
             throws IOException, ClassNotFoundException {
         Class<?> clazz = Class.forName(className);
 
@@ -84,12 +84,12 @@ public final class UnitTestTemplateCreatorUtils {
         builder.append("\n");
         builder.append("import org.mockito.InjectMocks;");
         builder.append("\n");
-        
+
         if (fieldArray.length > 0) {
             builder.append("import org.mockito.Mock;");
             builder.append("\n");
         }
-        
+
         builder.append("import org.mockito.junit.jupiter.MockitoExtension;");
         builder.append("\n");
         builder.append("\n");
@@ -145,14 +145,112 @@ public final class UnitTestTemplateCreatorUtils {
                     builder.append("()");
                     builder.append(" {");
                     builder.append("\n");
+                    builder.append("        // TODO Add some useful test code here");
+                    builder.append("\n");
                     builder.append("    }");
                     builder.append("\n");
                     builder.append("\n");
                 });
 
         builder.append("}");
+        builder.append("\n");
 
         String sourceCode = builder.toString();
+        LOGGER.info("##### Source Code Generated: \n{}", sourceCode);
+
+        // Write the source code into the source file
+        FileWriter writer = new FileWriter(sourceFile);
+        writer.write(sourceCode);
+        writer.close();
+
+        return sourceCode;
+    }
+
+    public static String createClassUsingTextBlock(String className, TestingFramework testingFramework)
+            throws IOException, ClassNotFoundException {
+        Class<?> clazz = Class.forName(className);
+
+        char c[] = clazz.getSimpleName().toCharArray();
+        c[0] = Character.toLowerCase(c[0]);
+        String injectMocks = new String(c);
+
+        Field[] fieldArray = clazz.getDeclaredFields();
+        Method[] methodArray = clazz.getDeclaredMethods();
+
+        String classPath = clazz.getPackageName().replaceAll(DOT, File.separator);
+        LOGGER.info("#####  classPath: {}", classPath);
+
+        // Create file with java extension and Test ending
+        File sourceFile = new File(SOURCE_TEST_PATH + classPath + File.separator + clazz.getSimpleName() + SUFFIX);
+        boolean isDirectoryCreated = sourceFile.getParentFile().mkdirs();
+        boolean isFileCreated = sourceFile.createNewFile();
+
+        LOGGER.info("#####  sourceFile: {}", sourceFile);
+        LOGGER.info("##### isDirectoryCreated? {}", isDirectoryCreated);
+        LOGGER.info("##### isFileCreated? {}", isFileCreated);
+
+        // Get the source file name
+        String testClassName = sourceFile.getName().split(DOT)[0];
+        String mockImport = fieldArray.length > 0 ? "import org.mockito.Mock;" : "";
+
+        String instanceVariableCode = """
+                    @Mock
+                    %s %s %s;
+
+                """;
+
+        // Add @Mock instance variables
+        StringBuilder builderInstanceVariables = new StringBuilder();
+        Arrays.stream(fieldArray).filter(Objects::nonNull).filter(field -> !field.toString().contains("static"))
+                .map(field -> field.toString().split(" ")).forEach(split -> {
+                    if (split[1].equals("final")) {
+                        split[1] = split[2];
+                        split[2] = split[3];
+                    }
+
+                    builderInstanceVariables.append(instanceVariableCode.formatted(split[0], split[1],
+                            split[2].split("\\.")[split[2].split("\\.").length - 1]));
+                });
+
+        String methodCode = """
+                    @Test
+                    public void %s() {
+                        // TODO Add some useful test code here
+                    }
+
+                """;
+
+        // Add methods to test
+        StringBuilder builderMethods = new StringBuilder();
+        Arrays.stream(methodArray).filter(Objects::nonNull).filter(method -> !method.getName().equals("canEqual"))
+                .filter(method -> !method.getName().equals("equals"))
+                .filter(method -> !method.getName().equals("hashCode"))
+                .filter(method -> !method.getName().equals("toString")).forEach(method -> {
+                    builderMethods.append(methodCode.formatted(method.getName()));
+                });
+
+        String sourceCode = """
+                package %s;
+
+                %s
+                import org.junit.jupiter.api.extension.ExtendWith;
+                import org.mockito.InjectMocks;
+                %s
+                import org.mockito.junit.jupiter.MockitoExtension;
+
+                @ExtendWith(MockitoExtension.class)
+                public class %s {
+
+                %s\
+                    @InjectMocks
+                    private %s %s;
+
+                %s\
+                }
+                         """.formatted(clazz.getPackageName(), testingFramework.getImportTestClass(), mockImport,
+                testClassName, builderInstanceVariables.toString(), clazz.getSimpleName(), injectMocks,
+                builderMethods.toString());
+
         LOGGER.info("##### Source Code Generated: \n{}", sourceCode);
 
         // Write the source code into the source file

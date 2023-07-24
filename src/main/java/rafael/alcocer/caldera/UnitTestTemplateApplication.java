@@ -31,13 +31,46 @@ public class UnitTestTemplateApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UnitTestTemplateCreatorUtils.createClass("rafael.alcocer.caldera.controller.AnyController",
+        /*
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.controller.AnyController",
                 TestingFramework.JUPITER);
-        UnitTestTemplateCreatorUtils.createClass("rafael.alcocer.caldera.data.AnyData", TestingFramework.JUPITER);
-        UnitTestTemplateCreatorUtils.createClass("rafael.alcocer.caldera.model.Any", TestingFramework.JUPITER);
-        UnitTestTemplateCreatorUtils.createClass("rafael.alcocer.caldera.model.Person", TestingFramework.TESTNG);
-        UnitTestTemplateCreatorUtils.createClass("rafael.alcocer.caldera.service.AnyService", TestingFramework.TESTNG);
-        UnitTestTemplateCreatorUtils.createClass("rafael.alcocer.caldera.service.AnyServiceImpl",
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.data.AnyData",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.model.Any",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.model.Person",
+                TestingFramework.TESTNG);
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.service.AnyService",
+                TestingFramework.TESTNG);
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.service.AnyServiceImpl",
+                TestingFramework.TESTNG);
+
+        
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.controller.AnyController",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.data.AnyData",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.model.Any",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.model.Person",
+                TestingFramework.TESTNG);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.service.AnyService",
+                TestingFramework.TESTNG);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.service.AnyServiceImpl",
+                TestingFramework.TESTNG);
+        */
+        
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.controller.AnyController",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.data.AnyData",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.model.Any",
+                TestingFramework.JUPITER);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.model.Person",
+                TestingFramework.TESTNG);
+        UnitTestTemplateCreatorUtils.createClassUsingStringBuilder("rafael.alcocer.caldera.service.AnyService",
+                TestingFramework.TESTNG);
+        UnitTestTemplateCreatorUtils.createClassUsingTextBlock("rafael.alcocer.caldera.service.AnyServiceImpl",
                 TestingFramework.TESTNG);
     }
 }
